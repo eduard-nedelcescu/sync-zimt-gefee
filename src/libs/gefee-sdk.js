@@ -82,6 +82,11 @@ class Gefee {
       }
     }
     return await axios.post(`${process.env.GEFEE_API_URL}${url_path}?${params}`, body_data);
+
+    // custom header values for axios. pass as $3
+    // {
+    //   headers: { 'Content-Type': 'application/json' }
+    // }
   }
 
 }
