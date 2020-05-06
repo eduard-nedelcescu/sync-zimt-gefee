@@ -1,6 +1,6 @@
-const axios = require('axios');
-const nodeRSA = require('node-rsa');
-const { isObjectEmpty } = require('./utils');
+const axios = require("axios");
+const nodeRSA = require("node-rsa");
+const { isObjectEmpty } = require("./utils");
 
 class Gefee {
   constructor() {
@@ -14,7 +14,9 @@ class Gefee {
   }
 
   async getSession() {
+
     try {
+
       const session = await this.get(process.env.ENDPOINT_GET_PING, {
         AppKey: process.env.GEFFEE_APP_KEY,
       });
@@ -37,14 +39,16 @@ class Gefee {
         Credentials: credentials,
       });
 
-      this.updateState(response.data.Result.AuthenticationToken, response.data.Result.UserProfile);
+      this.updateState(
+        response.data.Result.AuthenticationToken,
+        response.data.Result.UserProfile
+      );
 
       return this;
 
     } catch (err) {
-
       console.error(err);
-
+      return;
     }
   }
 
@@ -61,6 +65,21 @@ class Gefee {
     }
     return await axios.get(`${process.env.GEFEE_API_URL}${url_path}?${params}`);
   }
+
+  async post(url_path, param_object, body_data) {
+    let params = "";
+    if (!isObjectEmpty(param_object)) {
+      for (let [key, value] of Object.entries(param_object)) {
+        if (key === "appKey" || key === "AppKey" || key === "app_key") {
+          params += `${key}=${value}`;
+        } else {
+          params += `&${key}=${value}`;
+        }
+      }
+    }
+    return await axios.post(`${process.env.GEFEE_API_URL}${url_path}?${params}`, body_data);
+  }
+
 }
 
-module.exports = new Gefee;
+module.exports = new Gefee();

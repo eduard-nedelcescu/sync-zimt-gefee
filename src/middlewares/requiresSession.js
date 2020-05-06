@@ -9,7 +9,7 @@ module.exports = async (req, res, next) => {
         next();
       } catch (err) {
         console.error(err);
-        res.status(500).json(err);
+        res.status(500).send('Could not get session...');
       }
   }
 
