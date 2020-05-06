@@ -9,8 +9,12 @@ class Gefee {
   }
 
   updateState(newToken, userData) {
-    this.AuthenticationToken = newToken;
-    this.UserProfile = userData;
+    if (newToken && userData) {
+      this.AuthenticationToken = newToken;
+      this.UserProfile = userData;
+    } else if (newToken) {
+      this.AuthenticationToken = newToken;
+    }
   }
 
   async getSession() {

@@ -32,6 +32,8 @@ module.exports = server => {
         locality_id: req.params.locality_id
       });
 
+      gefee.updateState(result.data.NewUserKey);
+
       res.json(result.data);
 
     } catch (err) {
