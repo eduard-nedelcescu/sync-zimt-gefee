@@ -4,11 +4,11 @@ const requiresSession = require('../middlewares/requiresSession');
 
 module.exports = server => {
 
-  server.get('/api/gefee/test', requiresSession, async (req, res) => {
+  // server.get('/api/gefee/test', requiresSession, async (req, res) => {
 
-    res.send(gefee.UserProfile);
+  //   res.send(gefee.UserProfile);
 
-  });
+  // });
 
   server.get('/api/gefee/login', async (req, res) => {
     try {
@@ -39,6 +39,25 @@ module.exports = server => {
     } catch (err) {
       console.log(err);
       res.status(500).send('Could not find streets...')
+    }
+  });
+
+  // error for 6 digits. works with 5
+  server.get('/api/gefee/get_address/:zip_code', requiresSession, async (req, res) => {
+    try {
+      const result = await gefee.get(process.env.ENDPOINT_GET_ADDRESS, {
+        app_key: process.env.GEFFEE_APP_KEY,
+        session_token: gefee.AuthenticationToken,
+        zip_code: req.params.zip_code
+      });
+
+      gefee.updateState(result.data.NewUserKey);
+
+      res.json(result.data);
+
+    } catch (err) {
+      console.log(err);
+      res.status(500).send('Could not find addresses...')
     }
   });
 
