@@ -51,6 +51,7 @@ module.exports = server => {
         zip_code: req.params.zip_code
       });
 
+      // TODO: Turn into middleware that runs after handler
       gefee.updateState(result.data.NewUserKey);
 
       res.json(result.data);
@@ -76,32 +77,32 @@ module.exports = server => {
     } catch (err) {
 
       console.error(err);
-      // res.status(500).send('Could not create business partner...');
-      res.send(err);
+      res.status(500).send('Could not create correspondence address...');
+      // res.send(err);
 
     }
   });
 
-  // server.post('/api/gefee/add_partner_business', requiresSession, async (req, res) => {
-  //   console.log(req.body);
-  //   const base64BodyData = Buffer.from(JSON.stringify({data: req.body})).toString('base64');
+  server.post('/api/gefee/add_partner_business', requiresSession, async (req, res) => {
+    console.log(req.body);
+    const base64BodyData = Buffer.from(JSON.stringify({data: req.body})).toString('base64');
 
-  //   try {
+    try {
 
-  //     const response = await gefee.post(process.env.ENDPOINT_POST_BUSINESS_PARTNER_ADD, {
-  //       app_key: process.env.GEFFEE_APP_KEY,
-  //       session_token: gefee.AuthenticationToken,
-  //     }, base64BodyData);
+      const response = await gefee.post(process.env.ENDPOINT_POST_BUSINESS_PARTNER_ADD, {
+        app_key: process.env.GEFFEE_APP_KEY,
+        session_token: gefee.AuthenticationToken,
+      }, base64BodyData);
 
-  //     res.json(response);
+      res.json(response);
 
-  //   } catch (err) {
+    } catch (err) {
 
-  //     console.error(err);
-  //     // res.status(500).send('Could not create business partner...');
-  //     res.send(err);
+      console.error(err);
+      res.status(500).send('Could not create business partner...');
+      // res.send(err);
 
-  //   }
-  // });
+    }
+  });
 
 };
